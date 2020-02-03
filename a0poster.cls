@@ -1,0 +1,1 @@
+tex/a0poster.cls

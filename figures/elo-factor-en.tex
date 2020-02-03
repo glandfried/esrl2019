@@ -1,0 +1,62 @@
+\documentclass[10pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+
+\input{../../../aux/tikzlibrarybayesnet.code.tex}
+\input{../../../aux/encabezado.tex}
+\makeatletter
+\newcommand{\vast}{\bBigg@{2.5}}
+\newcommand{\Vast}{\bBigg@{14.5}}
+\makeatother
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\begin{document}
+
+\tikz{ %
+        
+        
+        \node[det, fill=black!10, minimum size=25pt] (r) {\Large $r_{ab}$} ; %
+        \node[const, right=of r, xshift=0cm] (r_name) {\large: Result}; 
+        
+        \node[factor, above=of r] (fr) {} ;
+        \node[const, right=of fr] (dfr) {\Large $r = \mathbb{I}(p_a>p_b)$}; 
+        \node[latent, above=of fr, xshift=-0.8cm, minimum size=25pt] (p1) {\Large $p_a$} ; %
+        \node[latent, above=of fr, xshift=0.8cm, minimum size=25pt] (p2) {\Large $p_b$} ; %
+        \node[const, right=of p2, xshift=0cm] (p_name) {\large: Performance}; 
+        
+        
+        \node[factor, above=of p1] (fp1) {} ;
+        \node[factor, above=of p2] (fp2) {} ;
+        \node[const, right=of fp2] (dp) {\Large $p \sim N(s,\beta^2)$};
+        
+        
+        \node[latent, above=of fp1, minimum size=25pt] (s1) {\Large $s_a$} ; %
+        \node[latent, above=of fp2, minimum size=25pt] (s2) {\Large $s_b$} ; %        
+        \node[const, right=of s2, xshift=0cm] (s_name) {\large: Skill}; 
+        
+        \node[factor, above=of s1] (fs1) {} ;
+        \node[factor, above=of s2] (fs2) {} ;                        \node[const, right=of fs2] (ds) {\Large $s \sim N(\widehat{\mu},\widehat{\sigma}^2)$};
+
+        \node[const, right=of s2 , xshift=2.75cm,yshift=1.5cm] (prior) {\vast\}  $\hfrac{\text{\Large Belief}}{\text{\Large distribution}}$ };
+        
+        \node[const, right=of p2 , xshift=2.75cm,yshift=0.75cm] (prior) {\Vast\} \Large \ \ \ Model };
+
+        \node[const, right=of p2 , xshift=2.75cm,yshift=-3cm] (prior) {\vast\} \Large \ \  \ Data };
+        
+        
+        \node[invisible, right=of s2, xshift=6.5cm] (s-dist) {};
+        
+        \edge[-] {fr} {r};
+        \edge[-] {p1} {fr};
+        \edge[-] {p2} {fr};
+        \edge[-] {fp1} {p1};
+        \edge[-] {fp2} {p2};
+        \edge[-] {s1} {fp1};
+        \edge[-] {s2} {fp2};
+        \edge[-] {fs1} {s1};
+        \edge[-] {fs2} {s2};
+        } 
+
+
+\end{document}

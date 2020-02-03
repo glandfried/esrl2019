@@ -1,0 +1,25 @@
+\tikz{ %
+        \node[latent] (d) {$d$} ; %
+        \factor[above=of d] {d-factor} {} {} {};
+        \node[latent, above=of d-factor,yshift=0.8cm] (t) {$t$} ; %
+        \factor[above=of t,yshift=0.6cm] {t-factor} {} {} {};
+        \node[latent, above=of t-factor,yshift=0.6cm] (p) {$p$} ; %
+        \node[latent, above=of p,xshift=-1cm,yshift=0.6cm] (s) {$s$} ; %
+        \node[obs, above=of p,xshift=1cm,yshift=0.6cm] (beta) {$\beta$} ; %
+        \factor[above=of s,yshift=0.6cm] {s-factor} {} {} {};
+        \node[const, right=of s-factor, xshift=-0.5cm] (s-dist) {$s_j \sim N(\mu_j,\sigma_j)$} ; %
+        \factor[above=of p,yshift=0.2cm] {p-factor} {} {} {};
+        \node[const, right=of p-factor, xshift=-0.5cm] (p-dist) {$p_j \sim N(s_j,\beta)$} ; %
+        \node[const, right=of t-factor, xshift=-0.5cm] (t-dist) {$t_i \sim \sum_{j\in A_i} p_j$} ; %
+        \node[const, right=of d-factor, xshift=-0.5cm] (d-dist) {$d_{ab} \sim t_a - t_b$} ; %
+	\factor[below=of d,yshift=-0.3cm] {result} {} {} {};
+        \node[const, right=of result, xshift=-0.5cm] (result-dist) {$d_{ab} > 0$} ; %
+        \factoredge[-] {} {result} {d} ; %
+        \factoredge[-] {t} {d-factor} {d} ; %
+        \factoredge[-] {p} {t-factor} {t} ; %
+        \factoredge[-] {s,beta} {p-factor} {p} ; %
+        \factoredge[-] {} {s-factor} {s} ; %
+	\plate {personas} {(p-dist)(s-dist)(p-factor)(s-factor)(p)(s)(beta)} {$j \in A_i$}; %
+        \plate {equipos} {(personas) (t-factor)(p-factor)(s-factor)(t)(p)(s)(beta)} {$ i \in \{1\dots k\}$}; %
+	\plate {comparacion} {(equipos)(personas) (t-factor)(p-factor)(s-factor)(t)(p)(s)(beta) (result)} {$a,b \in \{1\dots k\} \mid a < b $}; %
+        }
